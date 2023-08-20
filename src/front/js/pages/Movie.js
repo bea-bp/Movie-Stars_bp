@@ -51,6 +51,9 @@ export const Movie = () => {
                     <div className="description">
                         <p>{movie?.description}</p>
                     </div>
+
+                    {/* {!logged ? <i className="fa-regular fa-heart"></i> : null} */}
+
                 </div>
                 <div className="col-md-6 d-flex flex-column align-items-right">
                     {trailerUrl ? (
@@ -74,7 +77,6 @@ export const Movie = () => {
             <div className="container-crew">
                 <div className="d-flex  align-items-center">
                     <h4 className="act_direct">Actors and Directors</h4>
-                    {/* <button className="mostrar-mas">Show more</button> */}
                 </div>
                 
 

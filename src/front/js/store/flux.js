@@ -268,6 +268,72 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error(error);
 					return null;
 				}
+			},
+
+			// addNewLikedElement: (elementToAdd) => {
+			// 	const likes = getStore().likes;
+			// 	const updatedLikes = [...likes, elementToAdd];
+			// 	window.localStorage.setItem("likes", JSON.stringify(updatedLikes));
+			// 	setStore({ likes: updatedLikes });
+			//   },
+			
+			//   removeLikedElement: (id) => {
+			// 	const likes = getStore().likes;
+			// 	const filtered = likes.filter((element) => element.id !== id);
+			// 	window.localStorage.setItem("likes", JSON.stringify(filtered));
+			// 	setStore({ likes: filtered });
+			//   },
+			
+			//   isLikedElement: (id) => {
+			// 	const likes = getStore().likes;
+			// 	const likesId = likes.map((element) => element.id);
+			// 	return likesId.includes(id);
+			//   },
+		
+			addNewLikedElement: async (elementToAdd) => {
+				// Puedes hacer un POST al endpoint para agregar un nuevo favorito
+				const response = await fetch("URL_DEL_ENDPOINT_FAVORITOS", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify(elementToAdd)
+				});
+			
+				if (response.ok) {
+					const updatedLikes = await response.json();
+					setStore({ likes: updatedLikes });
+				} else {
+					// Manejar error
+					console.error("Error al agregar favorito", await response.text());
+				}
+			},
+			
+			getLikedElements: async () => {
+				// Puedes hacer un GET al endpoint para obtener todos los favoritos
+				const response = await fetch("URL_DEL_ENDPOINT_FAVORITOS");
+				if (response.ok) {
+					const likes = await response.json();
+					setStore({ likes });
+				} else {
+					// Manejar error
+					console.error("Error al obtener favoritos", await response.text());
+				}
+			},
+			
+			removeLikedElement: async (id) => {
+				// Puedes hacer un DELETE o POST con información especial al endpoint para remover un favorito
+				const response = await fetch(`URL_DEL_ENDPOINT_FAVORITOS/${id}`, {
+					method: "DELETE"
+				});
+			
+				if (response.ok) {
+					const updatedLikes = await response.json();
+					setStore({ likes: updatedLikes });
+				} else {
+					// Manejar error
+					console.error("Error al remover favorito", await response.text());
+				}
 			}
 
 

@@ -1,3 +1,28 @@
 .text-justify {
     text-align: justify;
+    font-family: 'Roboto', sans-serif;
+}
+
+.icon {
+    color: rgb(236, 206, 51) !important;
+}
+
+.yellow.ml-2 {
+    margin-left: 10px !important;
+    color: rgb(236, 206, 51) !important;
+}
+
+.no-padding {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.photo .card-img-top {
+    height: 450px;  
+    object-fit: cover;  
+    width: 100%;    
+}
+
+.biography {
+    font-size: 18px;
 }

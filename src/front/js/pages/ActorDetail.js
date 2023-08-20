@@ -10,8 +10,11 @@ export const ActorDetail = () => {
     const [actorDetail, setActorDetail] = useState(null);
     const [actorMovies, setActorMovies] = useState([]);
 
-    const newDate = new Date(actorDetail?.birthday);
-    const formatDate = newDate.toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric'});
+    const birthDate = actorDetail?.birthday ? new Date(actorDetail?.birthday) : null;
+    const formattedBirthDate = birthDate ? birthDate.toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric'}) : "";
+    
+    const deathDate = actorDetail?.deathday ? new Date(actorDetail?.deathday) : null;
+    const formattedDeathDate = deathDate ? deathDate.toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric'}) : "";
     
     const imageUrl = actorDetail?.profile_path
         ? `https://image.tmdb.org/t/p/w500${actorDetail?.profile_path}`
@@ -30,10 +33,15 @@ export const ActorDetail = () => {
             <div className="container">
                 <div className="row">
                     <div className="col-md-6 mt-5 mb-1">
-                        <h3>{actorDetail?.name}</h3>
-                        <h6>Character: {actorDetail?.character}</h6>
-                        <Link to={`/movie/${movieId}`}>GO BACK</Link>
-                        
+                        <h1>{actorDetail?.name}</h1>
+    
+                        <div className="d-flex align-items-center">
+                            <i className="icon fa-solid fa-circle-arrow-left ml-1"></i>
+                            <Link to={`/movie/${movieId}`} className="yellow ml-2">
+                                GO BACK
+                            </Link>
+                        </div>  
+
                     </div>
                     
             
@@ -41,32 +49,35 @@ export const ActorDetail = () => {
     
                 <div className="row">
                  
-                    <div className="col-md-4 d-flex flex-column top-aligned">
-                        <div className="card mt-2">
+                    <div className="photo col-md-3">
+                        <div className="card mt-2 mb-2">
                             <img
                                 className="card-img-top"
                                 src={imageUrl}
                                 alt={actorDetail?.name}
                             />
                         </div>
+                        <h5><strong> Character: </strong> {actorDetail?.character}</h5>
+                        <h5><strong> Department: </strong> {actorDetail?.known_for_department}</h5>
+                        <h5><strong> Birthday: </strong> {formattedBirthDate}</h5>
+                        <h5><strong> Born in: </strong> {actorDetail?.place_of_birth}</h5>
+                  
+                        {formattedDeathDate && <h5><strong>Date of death: </strong> {formattedDeathDate}</h5>}
+
+                        
+                       
+
                     </div>
     
-                    <div className="col-md-6">
-                        <h4>{formatDate}</h4>
-                        <h4>{actorDetail?.place_of_birth}</h4>
-                        <h4>{actorDetail?.deathday}</h4>
-                    </div>
-    
-                
-    
-                </div>
-                     <div className="col-md-12 mt-2 d-flex flex-column text-justify">
+
+                     <div className="biography col-md-9 d-flex flex-column text-justify">
+                        <h4><strong> Biography:  </strong></h4>
                         <p>{actorDetail?.biography}</p>
                     </div>
-                <div className="row">
-    
+
                 </div>
-               
+
+           
             </div>
         );
     };
