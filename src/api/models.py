@@ -164,10 +164,20 @@ class Favorite(db.Model):
         return f'Favorite {self.id}'
 
     def serialize(self):
-        return {
-            "id": self.id,
-            "user_id": self.user_id,
-            "actor_id": self.actor_id,
-            "director_id": self.director_id,
-            "movie_id": self.movie_id,
+        data = {
+        "id": self.id,
+        "user_id": self.user_id
         }
+
+        if self.actor_id:
+            data["type"] = "actor"
+            data["name"] = self.actor.name  
+        elif self.director_id:
+            data["type"] = "director"
+            data["name"] = self.director.name 
+        elif self.movie_id:
+            data["type"] = "movie"
+            data["name"] = self.movie.name
+
+
+        return data

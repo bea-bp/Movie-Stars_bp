@@ -32,7 +32,7 @@ export const DirectorDetail = () => {
         }).catch(error => {
             console.error("Hubo un error al cargar los datos:", error);
         });
-    }, [directorId, actions]);
+    }, [directorId]);
     
         return (
             <div className="container">
@@ -51,7 +51,7 @@ export const DirectorDetail = () => {
 
                 <div className="row">
                     <div className="photo col-md-3">
-                        <div className="card mt-2 mb-2">
+                        <div className="card mt-4 mb-2">
                             <img
                                 className="card-img-top"
                                 src={imageUrl}
@@ -59,15 +59,15 @@ export const DirectorDetail = () => {
                             />
                         </div>
                         <h5><strong> Department: </strong> {directorDetail?.known_for_department}</h5>
-                        <h5><strong> Birthday: </strong> {formattedBirthDate}</h5>
-                        <h5><strong> Born in: </strong> {directorDetail?.place_of_birth}</h5>
+                        <h5><strong> Birthday: </strong> {formattedBirthDate || 'No information available'}</h5>
+                        <h5><strong> Born in: </strong> {directorDetail?.place_of_birth || 'No information available'}</h5>
                         {formattedDeathDate && <h5><strong>Date of death: </strong> {formattedDeathDate}</h5>}
 
                     </div>
 
                     <div className="biography col-md-9 d-flex flex-column text-justify">
                         <h4><strong> Biography:  </strong></h4>
-                        <p>{directorDetail?.biography}</p>
+                        <p>{directorDetail?.biography|| 'No information available'} </p>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,7 @@
 import Swal from 'sweetalert2'
+import { useJwt } from "react-jwt";
+
+
 
 
 const getState = ({ getStore, getActions, setStore }) => {
@@ -10,22 +13,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 			movies: [],
 			movie: null,
 			actor: null,
-			director: null, 
-
+			director: null,
 		},
+
 		actions: {
+
 			// Use getActions to call a function within a fuction
 
 			passchange: async (form) => {
 				const apiUrl = `${process.env.BACKEND_URL}api/pass-change`
 				console.log(form, apiUrl)
-				const token = JSON.parse(localStorage.getItem("token")) 
+				const token = JSON.parse(localStorage.getItem("token"))
 				try {
 					const res = await fetch(apiUrl, {
 						method: "PATCH",
-						headers: { "Content-Type": "application/json", "Authorization":`Bearer ${token}`},
+						headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
 						body: JSON.stringify(form)
-					}) 
+					})
 					if (res.ok) {
 
 						const data = await res.json()
@@ -111,6 +115,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return false
 				}
 			},
+
 			logout: () => {
 				localStorage.removeItem("token")
 				setStore({ logged: false })
@@ -270,76 +275,108 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			// addNewLikedElement: (elementToAdd) => {
-			// 	const likes = getStore().likes;
-			// 	const updatedLikes = [...likes, elementToAdd];
-			// 	window.localStorage.setItem("likes", JSON.stringify(updatedLikes));
-			// 	setStore({ likes: updatedLikes });
-			//   },
-			
-			//   removeLikedElement: (id) => {
-			// 	const likes = getStore().likes;
-			// 	const filtered = likes.filter((element) => element.id !== id);
-			// 	window.localStorage.setItem("likes", JSON.stringify(filtered));
-			// 	setStore({ likes: filtered });
-			//   },
-			
-			//   isLikedElement: (id) => {
-			// 	const likes = getStore().likes;
-			// 	const likesId = likes.map((element) => element.id);
-			// 	return likesId.includes(id);
-			//   },
-		
-			addNewLikedElement: async (elementToAdd) => {
-				// Puedes hacer un POST al endpoint para agregar un nuevo favorito
-				const response = await fetch("URL_DEL_ENDPOINT_FAVORITOS", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify(elementToAdd)
-				});
-			
-				if (response.ok) {
-					const updatedLikes = await response.json();
-					setStore({ likes: updatedLikes });
-				} else {
-					// Manejar error
-					console.error("Error al agregar favorito", await response.text());
+			getMoviesByActor: async (actorId) => {
+				const apiUrl = `${process.env.BACKEND_URL}api/actors/${actorId}/movies`;
+				try {
+					const res = await fetch(apiUrl, {
+						method: "GET",
+						headers: { "Content-Type": "application/json" }
+					});
+					if (res.ok) {
+						const data = await res.json();
+						setStore({ movies: data }); // Store the movies of the actor
+						console.log(data);
+						return data;
+					} else {
+						console.log("Request failed", res.status);
+					}
+				} catch (error) {
+					console.error(error);
+					return null;
 				}
 			},
-			
-			getLikedElements: async () => {
-				// Puedes hacer un GET al endpoint para obtener todos los favoritos
-				const response = await fetch("URL_DEL_ENDPOINT_FAVORITOS");
-				if (response.ok) {
-					const likes = await response.json();
-					setStore({ likes });
-				} else {
-					// Manejar error
-					console.error("Error al obtener favoritos", await response.text());
+
+
+
+			addFavorite: async (element, userId) => {
+				const apiUrl = `${process.env.BACKEND_URL}api/users/${userId}/favorites`;
+
+				const token = localStorage.getItem("token");
+
+				console.log(JSON.stringify(element))
+
+				try {
+					const response = await fetch(apiUrl, {
+						method: "POST",
+						headers: {
+							'Authorization': `Bearer ${token}`,
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify(element)
+					});
+
+					if (response.ok) {
+						console.log("Favorito agregado con éxito");
+					} else {
+						console.error("Error al agregar favorito", await response.text());
+					}
+				} catch (error) {
+					console.error("Error en la petición:", error);
 				}
 			},
-			
-			removeLikedElement: async (id) => {
-				// Puedes hacer un DELETE o POST con información especial al endpoint para remover un favorito
-				const response = await fetch(`URL_DEL_ENDPOINT_FAVORITOS/${id}`, {
-					method: "DELETE"
-				});
-			
-				if (response.ok) {
-					const updatedLikes = await response.json();
-					setStore({ likes: updatedLikes });
-				} else {
-					// Manejar error
-					console.error("Error al remover favorito", await response.text());
+
+
+			getFavorites: async (userId) => {
+				const token = localStorage.getItem("token");
+				if (!token) return [];
+				const apiUrl = `${process.env.BACKEND_URL}api/users/favorites/${userId}`;
+				try {
+					const response = await fetch(apiUrl, {
+						headers: {
+							'Authorization': `Bearer ${token}`
+						}
+					});
+					if (response.ok) {
+						const favorites = await response.json();
+						return favorites;
+					} else {
+						console.error("Error al obtener favoritos", await response.text());
+						return [];
+					}
+				} catch (error) {
+					console.error("Error en la petición:", error);
+					return [];
 				}
+
+			},
+
+			isFavorite: async (id) => {
+				const token = localStorage.getItem("token");
+				if (!token) return [];
+				const apiUrl = `${process.env.BACKEND_URL}api/is_favorites/${id}`;
+				try {
+					const response = await fetch(apiUrl, {
+						headers: {
+							'Authorization': `Bearer ${token}`
+						}
+					});
+					if (response.ok) {
+						const isFavorite = await response.json();
+						return isFavorite;
+					} else {
+						console.error("Error al obtener favoritos", await response.text());
+						return false;
+					}
+				} catch (error) {
+					console.error("Error en la petición:", error);
+					return false;
+				}
+
 			}
 
-
-
-		}
+		},
 	};
+
 };
 
 export default getState;

@@ -27,7 +27,7 @@ export const ActorDetail = () => {
                     setActorMovies(movies);
                 });
             });
-        }, [actorId, actions]);
+        }, [actorId]);
     
         return (
             <div className="container">
@@ -50,7 +50,7 @@ export const ActorDetail = () => {
                 <div className="row">
                  
                     <div className="photo col-md-3">
-                        <div className="card mt-2 mb-2">
+                        <div className="card mt-4 mb-2">
                             <img
                                 className="card-img-top"
                                 src={imageUrl}
@@ -58,9 +58,9 @@ export const ActorDetail = () => {
                             />
                         </div>
                         <h5><strong> Character: </strong> {actorDetail?.character}</h5>
-                        <h5><strong> Department: </strong> {actorDetail?.known_for_department}</h5>
-                        <h5><strong> Birthday: </strong> {formattedBirthDate}</h5>
-                        <h5><strong> Born in: </strong> {actorDetail?.place_of_birth}</h5>
+                        <h5><strong> Department: </strong> {actorDetail?.known_for_department || 'No information available'}</h5>
+                        <h5><strong> Birthday: </strong> {formattedBirthDate || 'No information available'}</h5>
+                        <h5><strong> Born in: </strong> {actorDetail?.place_of_birth || 'No information available'}</h5>
                   
                         {formattedDeathDate && <h5><strong>Date of death: </strong> {formattedDeathDate}</h5>}
 
@@ -72,7 +72,7 @@ export const ActorDetail = () => {
 
                      <div className="biography col-md-9 d-flex flex-column text-justify">
                         <h4><strong> Biography:  </strong></h4>
-                        <p>{actorDetail?.biography}</p>
+                        <p>{actorDetail?.biography || 'No information available'}</p>
                     </div>
 
                 </div>

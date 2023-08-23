@@ -5,16 +5,45 @@ import { useParams } from "react-router-dom";
 import no_trailer2 from "../../img/no_trailer2.png";
 import no_image from "../../img/no_image.png";
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { useJwt } from "react-jwt";
 
 export const Movie = () => {
     const { store, actions } = useContext(Context);
     const { movieId } = useParams();
     const [movie, setMovie] = useState(null);
     const imageUrl = movie?.image ? `https://image.tmdb.org/t/p/w500${movie?.image}` : no_image;
-    const trailerUrl = movie?.trailer_key    ? `https://www.youtube.com/embed/${movie.trailer_key}`    : null;
+    const trailerUrl = movie?.trailer_key ? `https://www.youtube.com/embed/${movie.trailer_key}` : null;
 
-    console.log(movieId)
+    const logged = store.logged
 
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const { decodedToken, isExpired } = useJwt(token);
+
+
+    let userId = null;
+    if (decodedToken && !isExpired) {
+        userId = decodedToken.sub;
+    }
+
+    const isFavorite = actions.isFavorite(movieId);
+
+    const handleFavorite = () => {
+
+        if (isFavorite) {
+            // delite favorite
+        }
+        else {
+            if (movie && movie.id) {
+                actions.addFavorite({ movie_id: movie.id }, userId);
+            }
+        }
+
+    }
+
+    console.log(movie)
 
     useEffect(() => {
         console.log("actions");
@@ -29,9 +58,7 @@ export const Movie = () => {
             <div className="row">
                 <div className="col-md-6 mt-5 mb-3">
                     <h3>{movie?.name}</h3>
-
                 </div>
-                {/* <button className="mostrar-mas">Agregar a los favoritos</button> */}
             </div>
 
             <div className="row">
@@ -42,17 +69,32 @@ export const Movie = () => {
                 </div>
                 <div className="col-md-4 d-flex flex-column top-aligned">
                     <div>
-                         {movie?.genres?.map((genre, index) => (
-                             <button key={index} className="gender">{genre.name}</button>
-                            ))}
+                        {movie?.genres?.map((genre, index) => (
+                            <button key={index} className="gender">{genre.name}</button>
+                        ))}
                         <i className="fa fa-star star-icon"></i>
                         <span className="ranking">{movie?.ranking}/10</span>
                     </div>
+
                     <div className="description">
                         <p>{movie?.description}</p>
                     </div>
 
-                    {/* {!logged ? <i className="fa-regular fa-heart"></i> : null} */}
+                    <div>
+                        {
+                            logged &&
+                            <button
+                                className="favorite-button"
+                                aria-label="Agregar a favoritos"
+                                onClick={handleFavorite}>
+                                {isFavorite ? (
+                                    <i class="fa-solid fa-heart"></i>
+                                ) : (
+                                    <i class="fa-regular fa-heart"></i>
+                                )}
+                            </button>
+                        }
+                    </div>
 
                 </div>
                 <div className="col-md-6 d-flex flex-column align-items-right">
@@ -61,16 +103,16 @@ export const Movie = () => {
                             <iframe
                                 width="640"
                                 height="360"
-                                src={trailerUrl} 
+                                src={trailerUrl}
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen>
                             </iframe>
                         </div>
-                        ) : (
-                            <div className="image-container">
-                                 <img src={no_trailer2} alt="No trailer available" className="trailer-size" />
-                            </div>
-                        )}
+                    ) : (
+                        <div className="image-container">
+                            <img src={no_trailer2} alt="No trailer available" className="trailer-size" />
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -78,22 +120,22 @@ export const Movie = () => {
                 <div className="d-flex  align-items-center">
                     <h4 className="act_direct">Actors and Directors</h4>
                 </div>
-                
+
 
                 <div className="row">
                     {movie?.actors?.map((actor) => (
                         <div className="col-md-2" key={actor.id}>
-                            
+
                             <Link to={`/${movieId}/actors/${actor.id}`}>
                                 <div className="card">
-                                    <img 
-                                        className="profile_path" 
-                                        src={actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : no_image} 
+                                    <img
+                                        className="profile_path"
+                                        src={actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : no_image}
                                         alt={actor.name} />
-                                 </div>
+                                </div>
                                 <p className="card-name">{actor.name}</p>
                                 <p className="card-character">Character: {actor.character}</p>
-                                <p className="card-department">Department: {actor.known_for_department}</p> 
+                                <p className="card-department">Department: {actor.known_for_department}</p>
                             </Link>
                         </div>
                     ))}
@@ -102,16 +144,16 @@ export const Movie = () => {
                 <div className="row">
                     {movie?.directors?.map((director) => (
                         <div className="col-md-2" key={director.id}>
-                            
+
                             <Link to={`/${movieId}/directors/${director.id}`}>
                                 <div className="card">
-                                    <img 
-                                        className="profile_path" 
-                                        src={director.profile_path ? `https://image.tmdb.org/t/p/w185${director.profile_path}` : no_image} 
+                                    <img
+                                        className="profile_path"
+                                        src={director.profile_path ? `https://image.tmdb.org/t/p/w185${director.profile_path}` : no_image}
                                         alt={director.name} />
-                                 </div>
+                                </div>
                                 <p className="card-name">{director.name}</p>
-                                <p className="card-department">Department: {director.known_for_department}</p> 
+                                <p className="card-department">Department: {director.known_for_department}</p>
                             </Link>
                         </div>
                     ))}

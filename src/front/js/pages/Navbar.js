@@ -1,28 +1,58 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Moviestar from "../../img/Moviestar.png";
 import "../../styles/Navbar.css";
 import { Context } from "../store/appContext";
 import { Link, useNavigate } from "react-router-dom";
-
+import Swal from 'sweetalert2';
+import { useJwt } from "react-jwt";
 
 export const Navbar = () => {
   const { store, actions } = useContext(Context);
-  const navigate = useNavigate()
+  const [favorites, setFavorites] = useState([])
+  const navigate = useNavigate();
+  const logged = store.logged;
+  const handleLogout = () => {
+    actions.logout();
+    navigate("/");
+  };
 
-const logged = store.logged 
+  const token = localStorage.getItem("token");
+  let userId = null;
+  if (token) {
+    const { decodedToken, isExpired } = useJwt(token);
+    if (decodedToken && !isExpired) {
+      userId = decodedToken.sub;
+    }
+  };
 
-const handleLogout = () => {
+  const handleFavoritesClick = async () => {
+    if (userId) {
+      const userFavorites = await actions.getFavorites(userId);
+      const combinedNames = [
+        ...userFavorites.actors.map(actor => actor.name),
+        ...userFavorites.directors.map(director => director.name),
+        ...userFavorites.movies.map(movie => movie.name)
+      ];
+      setFavorites(combinedNames)
+    }
+  };
+  console.log(favorites)
 
-  actions.logout()
-  navigate("/")
-}
+  useEffect(() => {
+
+    handleFavoritesClick();
+      // const favorites = JSON.parse(localStorage).getItem ("favorites") || []
+
+  }, [userId]);
+
+
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div id="custom-navbar" className="container-fluid">
         <Link to={"/"} id="logo" className="navbar-brand" ><img id="imagenb" src={Moviestar} /></Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
+         
         </button>
         <div id="search-container">
           <input type="text" id="search-input" placeholder="Search for a movie or series..." />
@@ -42,15 +72,23 @@ const handleLogout = () => {
             </li>
                 
             <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              <button 
+                  onClick={handleFavoritesClick} 
+                  class="btn btn-secondary dropdown-toggle" 
+                  type="button" 
+                  id="dropdownMenuButton1" 
+                  data-bs-toggle="dropdown" 
+                  aria-expanded="false">
                   Favorites
-                </button>
-                <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                  <li><a className="dropdown-item" href="#">Action</a></li>
-                  <li><a className="dropdown-item" href="#">Another action</a></li>
-                  <li><a className="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-              </div>
+              </button>
+
+              <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                  {favorites.map((fav) => (
+                      <li key={fav.id}><a className="dropdown-item" href="#">{fav}</a></li>
+                  ))}
+              </ul>
+
+            </div>
 
             </div>
             )}
