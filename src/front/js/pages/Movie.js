@@ -28,30 +28,35 @@ export const Movie = () => {
         userId = decodedToken.sub;
     }
 
-    const isFavorite = actions.isFavorite(movieId);
-
-    const handleFavorite = () => {
-
+    const [isFavorite, setIsFavorite] = useState(false);
+    const handleFavorite = async () => {
         if (isFavorite) {
-            // delite favorite
-        }
-        else {
+            // Realiza lógica para eliminarlo de favoritos
+            // ...
+            await actions.deleteFavorite( movie.id, "movies", userId);
+        } else {
             if (movie && movie.id) {
-                actions.addFavorite({ movie_id: movie.id }, userId);
+                await actions.addFavorite({ movie_id: movie.id, favorite_type: "movies"}, userId);
             }
         }
+        setIsFavorite(!isFavorite); // Cambia el estado cuando se hace clic en el botón
+    };
 
-    }
-
-    console.log(movie)
 
     useEffect(() => {
-        console.log("actions");
         actions.getMovieById(movieId).then(movie => {
-            console.log(movieId, movie);
             setMovie(movie);
         });
-    }, [movieId]);
+
+        const fetchInitialIsFavorite = async () => {
+            if (userId) {
+              const initialIsFavorite = await actions.isFavorite(movieId);
+              setIsFavorite(initialIsFavorite);
+            }
+          };
+        fetchInitialIsFavorite();
+
+    }, [movieId, userId]);
 
     return (
         <div className="container">
@@ -84,13 +89,13 @@ export const Movie = () => {
                         {
                             logged &&
                             <button
-                                className="favorite-button"
+                                className="favorite-button btn"
                                 aria-label="Agregar a favoritos"
                                 onClick={handleFavorite}>
                                 {isFavorite ? (
-                                    <i class="fa-solid fa-heart"></i>
+                                    <i className="fa-solid fa-heart text-warning"></i>
                                 ) : (
-                                    <i class="fa-regular fa-heart"></i>
+                                    <i className="fa-regular fa-heart text-warning"></i>
                                 )}
                             </button>
                         }

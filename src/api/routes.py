@@ -223,10 +223,13 @@ def get_user_favorites(user_id):
     current_user_id = get_jwt_identity()
     if current_user_id != user_id:
         return jsonify({"msg": "Unauthorized"}), 401
+
     user_favorites = Favorite.query.filter_by(user_id=user_id).all()
+
     fav_actors = []
     fav_directors = []
     fav_movies = []
+
     for fav in user_favorites:
         if fav.actor_id:
             # Supongo que tienes un método serialize en tu modelo
@@ -256,11 +259,19 @@ def add_user_favorites(user_id):
     actor_id = data.get('actor_id')
     director_id = data.get('director_id')
     movie_id = data.get('movie_id')
+    favorite_type = data.get('favorite_type')
+
+    favorite_type = data.get('favorite_type')
+
+    if favorite_type not in ['actors', 'movies', 'directors']:
+        return jsonify({"msg": "Invalid favorite type"}), 400
+
     new_favorite = Favorite(
         user_id=user_id,
         actor_id=actor_id,
         director_id=director_id,
-        movie_id=movie_id
+        movie_id=movie_id,
+        favorite_type=favorite_type
     )
 
     db.session.add(new_favorite)
@@ -290,7 +301,30 @@ def is_favorite(id):
         return jsonify({"is_favorite": True}), 200
     else:
         return jsonify({"is_favorite": False}), 200
+
+
+@api.route('/users/<int:user_id>/favorites/<string:favorite_type>/<int:favorite_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user_favorite(user_id, favorite_type, favorite_id):
+    current_user_id = get_jwt_identity()
+    if current_user_id != user_id:
+        return jsonify({"msg": "Unauthorized"}), 401
+    if favorite_type not in ['actors', 'movies', 'directors']:
+        return jsonify({"msg": "Invalid favorite type"}), 400
     
+    favorite_to_delete = None
+    if favorite_type == 'actors':
+        favorite_to_delete = Favorite.query.filter_by(actor_id=favorite_id, user_id=user_id).first()
+    elif favorite_type == 'movies':
+        favorite_to_delete = Favorite.query.filter_by(movie_id=favorite_id, user_id=user_id).first()
+    elif favorite_type == 'directors':
+        favorite_to_delete = Favorite.query.filter_by(director_id=favorite_id, user_id=user_id).first()
+    if not favorite_to_delete:
+        return jsonify({"msg": "Favorite not found"}), 404
+    
+    db.session.delete(favorite_to_delete)
+    db.session.commit()
+    return jsonify({"msg": "Favorite deleted successfully"}), 200
 
 
 @api.route('/movies', methods=['GET'])

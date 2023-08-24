@@ -66,15 +66,15 @@ export const Navbar = () => {
             </li>)
             :
 
-            (<div>
+            (<div className="d-flex align-items-center">
                   <li className="nav-item">
               <button onClick={handleLogout} className="nav-link text-white btn">Sign Off</button>
             </li>
                 
-            <div class="dropdown">
+            <div class="dropdown dropstart mx-4">
               <button 
                   onClick={handleFavoritesClick} 
-                  class="btn btn-secondary dropdown-toggle" 
+                  class="btn btn-warning dropdown-toggle" 
                   type="button" 
                   id="dropdownMenuButton1" 
                   data-bs-toggle="dropdown" 
@@ -94,15 +94,6 @@ export const Navbar = () => {
             )}
 
 
-            <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                EN
-              </a>
-              <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a className="dropdown-item" value="es" href="#">ES</a></li>
-                <li><a className="dropdown-item" value="en" href="#">EN</a></li>
-              </ul>
-            </li>
           </ul>
         </div>
       </div>

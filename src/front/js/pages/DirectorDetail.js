@@ -3,6 +3,7 @@ import { Context } from "../store/appContext";
 import "../../styles/DirectorDetail.css";
 import { useParams, Link } from "react-router-dom";
 import no_image from "../../img/no_image.png";
+import { useJwt } from "react-jwt";
 
 export const DirectorDetail = () => {
     const { store, actions } = useContext(Context);
@@ -16,12 +17,37 @@ export const DirectorDetail = () => {
     const deathDate = directorDetail?.deathday ? new Date(directorDetail?.deathday) : null;
     const formattedDeathDate = deathDate ? deathDate.toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric'}) : "";
     
-
-
-
     const imageUrl = directorDetail?.profile_path
         ? `https://image.tmdb.org/t/p/w500${directorDetail?.profile_path}`
         : no_image;
+
+        const logged = store.logged
+
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const { decodedToken, isExpired } = useJwt(token);
+
+
+    let userId = null;
+    if (decodedToken && !isExpired) {
+        userId = decodedToken.sub;
+    }
+
+    const [isFavorite, setIsFavorite] = useState(false);
+    const handleFavorite = async () => {
+        if (isFavorite) {
+            // Realiza lógica para eliminarlo de favoritos
+            // ...
+            await actions.deleteFavorite(directorId, "directors", userId);
+        } else {
+            if (directorDetail && directorId) {
+                await actions.addFavorite({ director_id: directorId, favorite_type: "directors" }, userId);
+            }
+        }
+        setIsFavorite(!isFavorite); // Cambia el estado cuando se hace clic en el botón
+     
+    };
     
     useEffect(() => {
         actions.getDirectorById(directorId).then(director => {
@@ -38,7 +64,27 @@ export const DirectorDetail = () => {
             <div className="container">
                 <div className="row">
                     <div className="col-md-6 mt-5 mb-1">
-                        <h1>{directorDetail?.name}</h1>
+
+                        <div className="d-flex ">
+                            <h1>{directorDetail?.name}</h1>
+
+                            <div >
+                                {
+                                    logged &&
+                                    <button
+                                        className="favorite-button btn"
+                                        aria-label="Agregar a favoritos"
+                                        onClick={handleFavorite}>
+                                        {isFavorite ? (
+                                            <i className="fa-solid fa-heart text-warning"></i>
+                                        ) : (
+                                            <i className="fa-regular fa-heart text-warning"></i>
+                                        )}
+                                    </button>
+                                }
+                            </div>
+
+                        </div>
 
                         <div className="d-flex align-items-center">
                             <i className="icon fa-solid fa-circle-arrow-left ml-1"></i>

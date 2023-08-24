@@ -372,7 +372,27 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return false;
 				}
 
-			}
+			},
+
+			deleteFavorite: async (favoriteId,  favoriteType, userId) => {
+				const apiUrl = `${process.env.BACKEND_URL}api/users/${userId}/favorites/${favoriteType}/${favoriteId}`;
+				const token = localStorage.getItem("token");
+				try {
+					const response = await fetch(apiUrl, {
+						method: "DELETE",
+						headers: {
+							'Authorization': `Bearer ${token}`
+						}
+					});
+					if (response.ok) {
+						console.log("Favorito eliminado con éxito");
+					} else {
+						console.error("Error al eliminar favorito", await response.text());
+					}
+				} catch (error) {
+					console.error("Error en la petición:", error);
+				}
+			},
 
 		},
 	};
