@@ -3,34 +3,33 @@ import { Context } from "../store/appContext";
 import "../../styles/Listadomovies.css";
 import { Link } from 'react-router-dom';
 import no_image from "../../img/no_image.png";
+import { Spinner } from "../component/Spinner"; 
 
 export const Listadomovies = () => {
 	const { store, actions } = useContext(Context);
 	const [movies, setMovies] = useState([]);
-
-	// const rankingString = movies?.ranking;
-	// const rankingNumber = parseFloat(rankingString);
-	// const formattedRanking = rankingNumber.toFixed(1);
-	
-	
-
+	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
 		actions.getMovies().then(() => {
 			setMovies(store.movies);
+			setLoading(false)
 		});
 	}, []);
 
 	console.log(movies)
-	
+
 
 	return (
-		
-		<div className="container">
-		
-			<div className="row">
-			<h5 className="to-watch">Suggested Movies To Watch:</h5>
+		<div>
+		  {loading ? (  
+			<Spinner/>
+		  ) : (
+			<div className="container">
+			  <div className="row">
+				<h5 className="to-watch">Suggested Movies To Watch:</h5>
 				{movies.map((movie, i) => (
+
 					<div className="col-md-2" key={i}>
 						<Link to={`/movie/${movie.id}`}>
 							<div className="card mt-5">
@@ -43,8 +42,11 @@ export const Listadomovies = () => {
 							<p className="title">{movie.name}</p>
 						</Link>
 					</div>
+
 				))}
+			  </div>
 			</div>
+		  )}
 		</div>
-	);
-};
+	  );
+  };

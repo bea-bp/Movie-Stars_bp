@@ -4,8 +4,11 @@ import "../../styles/ActorDetail.css";
 import { useParams, Link } from "react-router-dom";
 import no_image from "../../img/no_image.png";
 import { useJwt } from "react-jwt";
+import { Spinner } from "../component/Spinner";
 
 export const ActorDetail = () => {
+
+    const [loading, setLoading] = useState(true);
     const { store, actions } = useContext(Context);
     const { actorId, movieId } = useParams();
     const [actorDetail, setActorDetail] = useState(null);
@@ -20,6 +23,7 @@ export const ActorDetail = () => {
     const imageUrl = actorDetail?.profile_path
         ? `https://image.tmdb.org/t/p/w500${actorDetail?.profile_path}`
         : no_image;
+
 
     const logged = store.logged
 
@@ -55,6 +59,8 @@ export const ActorDetail = () => {
             setActorDetail(actor);
             actions.getMoviesByActor(actorId).then(movies => {
                 setActorMovies(movies);
+                setLoading(false)
+      
             });
         });
         const fetchInitialIsFavorite = async () => {
@@ -70,6 +76,10 @@ export const ActorDetail = () => {
 
 
     return (
+      <div>
+            {loading ? (
+                <Spinner />
+            ) : (
         <div className="container">
             <div className="row">
                 <div className="col-md-6 mt-5 mb-1">
@@ -92,18 +102,13 @@ export const ActorDetail = () => {
                             }
                         </div>
                     </div>
-
-
                     <div className="d-flex align-items-center">
                         <i className="icon fa-solid fa-circle-arrow-left ml-1"></i>
                         <Link to={`/movie/${movieId}`} className="yellow ml-2">
                             GO BACK
                         </Link>
                     </div>
-
                 </div>
-
-
             </div>
 
             <div className="row">
@@ -120,23 +125,19 @@ export const ActorDetail = () => {
                     <h5><strong> Department: </strong> {actorDetail?.known_for_department || 'No information available'}</h5>
                     <h5><strong> Birthday: </strong> {formattedBirthDate || 'No information available'}</h5>
                     <h5><strong> Born in: </strong> {actorDetail?.place_of_birth || 'No information available'}</h5>
-
                     {formattedDeathDate && <h5><strong>Date of death: </strong> {formattedDeathDate}</h5>}
-
-
-
-
                 </div>
-
-
                 <div className="biography col-md-9 d-flex flex-column text-justify">
                     <h4><strong> Biography:  </strong></h4>
                     <p>{actorDetail?.biography || 'No information available'}</p>
                 </div>
-
             </div>
 
-
+        </div>
+        )}
         </div>
     );
 };
+
+
+   

@@ -7,9 +7,12 @@ import no_image from "../../img/no_image.png";
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useJwt } from "react-jwt";
+import { Spinner } from "../component/Spinner";
+
 
 export const Movie = () => {
     const { store, actions } = useContext(Context);
+    const [loading, setLoading] = useState(true)
     const { movieId } = useParams();
     const [movie, setMovie] = useState(null);
     const imageUrl = movie?.image ? `https://image.tmdb.org/t/p/w500${movie?.image}` : no_image;
@@ -46,6 +49,7 @@ export const Movie = () => {
     useEffect(() => {
         actions.getMovieById(movieId).then(movie => {
             setMovie(movie);
+            setLoading(false)
         });
 
         const fetchInitialIsFavorite = async () => {
@@ -59,6 +63,10 @@ export const Movie = () => {
     }, [movieId, userId]);
 
     return (
+ <div>
+            {loading ? (
+                <Spinner />
+            ) : (
         <div className="container">
             <div className="row">
                 <div className="col-md-6 mt-5 mb-3">
@@ -160,14 +168,11 @@ export const Movie = () => {
                                 <p className="card-name">{director.name}</p>
                                 <p className="card-department">Department: {director.known_for_department}</p>
                             </Link>
-                        </div>
+                      </div>
                     ))}
                 </div>
 
-
-
-
-            </div>
+            )}
         </div>
     );
 };

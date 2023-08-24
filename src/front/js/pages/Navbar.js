@@ -45,8 +45,6 @@ export const Navbar = () => {
 
   }, [userId]);
 
-
-
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div id="custom-navbar" className="container-fluid">
@@ -60,6 +58,7 @@ export const Navbar = () => {
         </div>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mb-2 mb-lg-0">
+
 
             {!logged ? (<li className="nav-item">
               <Link to={"/login"} className="nav-link text-white">Log in</Link>
@@ -103,13 +102,3 @@ export const Navbar = () => {
 };
 
 
-
-
-
-
-
-
-//  <form className="d-flex">
-//  <input className="form-control me-2" id="searchInput" type="search" placeholder="Buscar pelicula o serie" aria-label="Search"/>
-//  <button className="btn btn-outline-success" type="submit">GO</button>
-//  </form> 
