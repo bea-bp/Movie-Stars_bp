@@ -45,7 +45,9 @@ button[type="submit"] {
   border-radius: 20px;
   margin: 0px 0px 38px;
   text-align: center;
+  width: 30%;  
   font-family: 'Roboto', sans-serif; 
+  padding-right: 20px;
 }
 
 #mo{

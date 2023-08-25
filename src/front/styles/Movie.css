@@ -10,6 +10,11 @@
   color: rgb(236, 206, 51);
 }
 
+.movie-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
 .ranking {
     color: white; 
