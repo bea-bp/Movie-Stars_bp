@@ -11,15 +11,17 @@ export const Navbar = () => {
   const [favorites, setFavorites] = useState([])
   const navigate = useNavigate();
   const logged = store.logged;
+
+  
   const handleLogout = () => {
     actions.logout();
     navigate("/");
   };
 
   const token = localStorage.getItem("token");
+  const { decodedToken, isExpired } = useJwt(token);
   let userId = null;
   if (token) {
-    const { decodedToken, isExpired } = useJwt(token);
     if (decodedToken && !isExpired) {
       userId = decodedToken.sub;
     }
@@ -41,7 +43,7 @@ export const Navbar = () => {
   useEffect(() => {
 
     handleFavoritesClick();
-      // const favorites = JSON.parse(localStorage).getItem ("favorites") || []
+    // const favorites = JSON.parse(localStorage).getItem ("favorites") || []
 
   }, [userId]);
 
@@ -50,7 +52,7 @@ export const Navbar = () => {
       <div id="custom-navbar" className="container-fluid">
         <Link to={"/"} id="logo" className="navbar-brand" ><img id="imagenb" src={Moviestar} /></Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-         
+
         </button>
         <div id="search-container">
           <input type="text" id="search-input" placeholder="Search for a movie or series..." />
@@ -60,37 +62,37 @@ export const Navbar = () => {
           <ul className="navbar-nav mb-2 mb-lg-0">
 
 
-            {!logged ? (<li className="nav-item">
+            {!token ? (<li className="nav-item">
               <Link to={"/login"} className="nav-link text-white">Log in</Link>
             </li>)
-            :
+              :
 
-            (<div className="d-flex align-items-center">
-                  <li className="nav-item">
-              <button onClick={handleLogout} className="nav-link text-white btn">Sign Off</button>
-            </li>
-                
-            <div className="dropdown dropstart mx-4">
-              <button 
-                  onClick={handleFavoritesClick} 
-                  className="btn btn-warning dropdown-toggle" 
-                  type="button" 
-                  id="dropdownMenuButton1" 
-                  data-bs-toggle="dropdown" 
-                  aria-expanded="false">
-                  Favorites
-              </button>
+              (<div className="d-flex align-items-center">
+                <li className="nav-item">
+                  <button onClick={handleLogout} className="nav-link text-white btn">Sign Off</button>
+                </li>
 
-              <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                  {favorites.map((fav) => (
+                <div className="dropdown dropstart mx-4">
+                  <button
+                    onClick={handleFavoritesClick}
+                    className="btn btn-warning dropdown-toggle"
+                    type="button"
+                    id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Favorites
+                  </button>
+
+                  <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    {favorites.map((fav) => (
                       <li key={fav.id}><a className="dropdown-item" href="#">{fav}</a></li>
-                  ))}
-              </ul>
+                    ))}
+                  </ul>
 
-            </div>
+                </div>
 
-            </div>
-            )}
+              </div>
+              )}
 
 
           </ul>

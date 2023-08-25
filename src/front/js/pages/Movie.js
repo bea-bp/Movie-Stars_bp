@@ -70,10 +70,15 @@ export const Movie = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-6 mt-5 mb-3">
-                            <h3>{movie?.name}</h3>
+                            <div className="movie-title-container">
+                                <h3>{movie?.name}</h3>
+                            </div>
+
+
+
                         </div>
                     </div>
-    
+
                     <div className="row">
                         <div className="col-md-2">
                             <div className="card mt-1">
@@ -88,30 +93,30 @@ export const Movie = () => {
                                 <i className="fa fa-star star-icon"></i>
                                 <span className="ranking">{movie?.ranking.toFixed(1)}/10</span>
                             </div>
-    
+
                             <div className="description">
                                 <p>{movie?.description}</p>
                             </div>
-    
+
                             <div>
                                 {
-                                    logged &&
+                                    token &&
                                     <button
-                                        className="movie_favorites favorite-button btn"
+                                        className="favorite-button btn"
                                         aria-label="Agregar a favoritos"
+                                        title="Add to favorites"
                                         onClick={handleFavorite}>
                                         {isFavorite ? (
-                                            <i className="fa-solid fa-heart"></i>
+                                            <i className="fa-solid fa-heart text-warning fa-lg"></i>
                                         ) : (
-                                            <i className="fa-regular fa-heart">Add to favorites</i>
-                                           
+                                            <i className="fa-regular fa-heart text-warning fa-lg"></i>
                                         )}
-                                        
                                     </button>
                                 }
                             </div>
+
                         </div>
-    
+
                         <div className="col-md-6 d-flex flex-column align-items-right">
                             {trailerUrl ? (
                                 <div className="video-container">
@@ -130,12 +135,12 @@ export const Movie = () => {
                             )}
                         </div>
                     </div>
-    
+
                     <div className="container-crew">
                         <div className="d-flex  align-items-center">
                             <h4 className="act_direct">Actors and Directors</h4>
                         </div>
-    
+
                         <div className="row">
                             {movie?.actors?.map((actor) => (
                                 <div className="col-md-2" key={actor.id}>
@@ -153,7 +158,7 @@ export const Movie = () => {
                                 </div>
                             ))}
                         </div>
-    
+
                         <div className="row">
                             {movie?.directors?.map((director) => (
                                 <div className="col-md-2" key={director.id}>

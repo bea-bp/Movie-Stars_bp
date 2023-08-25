@@ -79,17 +79,18 @@ export const DirectorDetail = () => {
                             <div className="d-flex ">
                                 <h1>{directorDetail?.name}</h1>
 
-                                <div >
+                                <div>
                                     {
-                                        logged &&
+                                        token &&
                                         <button
                                             className="favorite-button btn"
                                             aria-label="Agregar a favoritos"
+                                            title="Add to favorites"  // Tooltip
                                             onClick={handleFavorite}>
                                             {isFavorite ? (
-                                                <i className="fa-solid fa-heart text-warning"></i>
+                                                <i className="fa-solid fa-heart text-warning fa-2x"></i>  // Ícono más grande
                                             ) : (
-                                                <i className="fa-regular fa-heart text-warning"></i>
+                                                <i className="fa-regular fa-heart text-warning fa-2x"></i>  // Ícono más grande
                                             )}
                                         </button>
                                     }
@@ -128,17 +129,9 @@ export const DirectorDetail = () => {
                             <p>{directorDetail?.biography || 'No information available'} </p>
                         </div>
                     </div>
-                    <div className="col-md-6 d-flex flex-column top-aligned">
-                        <h2>{directorDetail?.birthday}</h2>
-                        <h2>{directorDetail?.place_of_birth}</h2>
-                        <h2>{directorDetail?.deathday}</h2>
-                    </div>
 
-                    <div className="col-md-12 mt-2 d-flex flex-column text-justify">
-                        <p>{directorDetail?.biography}</p>
-                    </div>
-                    <div className="row">
-                    </div>
+
+
 
                 </div>
             )}
