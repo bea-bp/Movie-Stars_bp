@@ -70,10 +70,10 @@ export const Navbar = () => {
               <button onClick={handleLogout} className="nav-link text-white btn">Sign Off</button>
             </li>
                 
-            <div class="dropdown dropstart mx-4">
+            <div className="dropdown dropstart mx-4">
               <button 
                   onClick={handleFavoritesClick} 
-                  class="btn btn-warning dropdown-toggle" 
+                  className="btn btn-warning dropdown-toggle" 
                   type="button" 
                   id="dropdownMenuButton1" 
                   data-bs-toggle="dropdown" 

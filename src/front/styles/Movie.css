@@ -10,6 +10,10 @@
   color: rgb(236, 206, 51);
 }
 
+.movie_favorites{
+  font-family: 'Roboto', sans-serif; 
+  color: rgb(236, 206, 51);
+}
 
 .ranking {
     color: white; 

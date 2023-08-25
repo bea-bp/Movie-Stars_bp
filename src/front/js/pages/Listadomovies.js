@@ -35,7 +35,7 @@ export const Listadomovies = () => {
 							<div className="card mt-5">
 								<div className="star-ranking">
 									<i className="fa fa-star star-icon"></i>
-									<span className="ranking">{movie?.ranking}</span>
+									<span className="ranking">{movie?.ranking.toFixed(1)}</span>
 								</div>
 								<img className="card-img-top"  src={movie.image ? `https://image.tmdb.org/t/p/w500${movie.image}` : no_image} alt="Poster Movie" />
 							</div>
