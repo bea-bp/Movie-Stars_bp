@@ -73,7 +73,7 @@ export const Movie = () => {
                             <div className="movie-title-container">
                                 <h3>{movie?.name}</h3>
                             </div>
-
+                              
 
 
                         </div>
