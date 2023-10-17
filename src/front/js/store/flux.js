@@ -2,6 +2,8 @@ import Swal from 'sweetalert2'
 import { useJwt } from "react-jwt";
 
 
+
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -189,8 +191,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 
-			getMovies: async () => {
-				const apiUrl = `${process.env.BACKEND_URL}api/movies`
+			getMovies: async (searchQuery) => {
+				console.log(searchQuery)
+				const apiUrl = `${process.env.BACKEND_URL}api/movies?searchQuery=${searchQuery}`
 				try {
 					const res = await fetch(apiUrl, {
 						method: "GET",
@@ -198,9 +201,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					if (res.ok) {
 						const data = await res.json()
-						console.log(data)
 						setStore({ movies: data })
-						console.log(getStore().movies);
 						return data;
 					} else {
 						console.log("Request failed", res.status)
@@ -372,7 +373,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			},
 
-			deleteFavorite: async (favoriteId,  favoriteType, userId) => {
+			deleteFavorite: async (favoriteId, favoriteType, userId) => {
 				const apiUrl = `${process.env.BACKEND_URL}api/users/${userId}/favorites/${favoriteType}/${favoriteId}`;
 				const token = localStorage.getItem("token");
 				try {
@@ -391,17 +392,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error en la petición:", error);
 				}
 			},
-			load_data: () =>{
-				var requestOptions = {
-					method: 'GET',
-					redirect: 'follow'
-				  };
-				  
-				  fetch(`${process.env.BACKEND_URL}api/load_database`, requestOptions)
-					.then(response => response.text())
-					.then(result => console.log(result))
-					.catch(error => console.log('error', error));
-			}
+
 		},
 	};
 

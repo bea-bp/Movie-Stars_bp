@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
@@ -24,18 +24,21 @@ const Layout = () => {
     // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
     const basename = process.env.BASENAME || "";
 
-    if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
+    const [searchQuery, setSearchQuery] = useState('');
+
+
+    if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
         <div>
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
-                    <Navbar/>
+                    <Navbar onSearchChange={setSearchQuery} />
                     <Routes>
-                        <Route element={<Listadomovies />} path="/" />
-                        <Route element={<Movie />} path="/movie/:movieId" /> 
-                        <Route element={<ActorDetail />} path="/:movieId/actors/:actorId" /> 
-                        <Route element={<DirectorDetail />} path="/:movieId/directors/:directorId" /> 
+                        <Route element={<Listadomovies searchQuery={searchQuery} />} path="/" />
+                        <Route element={<Movie />} path="/movie/:movieId" />
+                        <Route element={<ActorDetail />} path="/:movieId/actors/:actorId" />
+                        <Route element={<DirectorDetail />} path="/:movieId/directors/:directorId" />
                         <Route element={<Login />} path="/login" />
                         <Route element={<SignIn />} path="/sign-up" />
                         <Route element={<Single />} path="/single/:theid" />

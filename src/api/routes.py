@@ -10,7 +10,7 @@ import os
 from flask import request, jsonify
 from flask_cors import CORS
 import bcrypt
-
+from sqlalchemy import func
 
 app = Flask(__name__)
 CORS(app)
@@ -311,17 +311,20 @@ def delete_user_favorite(user_id, favorite_type, favorite_id):
         return jsonify({"msg": "Unauthorized"}), 401
     if favorite_type not in ['actors', 'movies', 'directors']:
         return jsonify({"msg": "Invalid favorite type"}), 400
-    
+
     favorite_to_delete = None
     if favorite_type == 'actors':
-        favorite_to_delete = Favorite.query.filter_by(actor_id=favorite_id, user_id=user_id).first()
+        favorite_to_delete = Favorite.query.filter_by(
+            actor_id=favorite_id, user_id=user_id).first()
     elif favorite_type == 'movies':
-        favorite_to_delete = Favorite.query.filter_by(movie_id=favorite_id, user_id=user_id).first()
+        favorite_to_delete = Favorite.query.filter_by(
+            movie_id=favorite_id, user_id=user_id).first()
     elif favorite_type == 'directors':
-        favorite_to_delete = Favorite.query.filter_by(director_id=favorite_id, user_id=user_id).first()
+        favorite_to_delete = Favorite.query.filter_by(
+            director_id=favorite_id, user_id=user_id).first()
     if not favorite_to_delete:
         return jsonify({"msg": "Favorite not found"}), 404
-    
+
     db.session.delete(favorite_to_delete)
     db.session.commit()
     return jsonify({"msg": "Favorite deleted successfully"}), 200
@@ -329,7 +332,13 @@ def delete_user_favorite(user_id, favorite_type, favorite_id):
 
 @api.route('/movies', methods=['GET'])
 def get_movies():
-    movies = Movie.query.all()
+    search_query = request.args.get('searchQuery', None)
+    if search_query:
+        search_query_lower = search_query.lower()  # Convertimos la consulta a minúsculas
+        movies = Movie.query.filter(func.lower(Movie.name).contains(search_query_lower)).all()
+    else:
+        movies = Movie.query.all()
+
     return jsonify([movie.serialize() for movie in movies]), 200
 
 

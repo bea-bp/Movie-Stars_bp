@@ -6,11 +6,12 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 import { useJwt } from "react-jwt";
 
-export const Navbar = () => {
+export const Navbar = ({ onSearchChange }) => {
   const { store, actions } = useContext(Context);
   const [favorites, setFavorites] = useState([])
   const navigate = useNavigate();
   const logged = store.logged;
+  const [searchValue, setSearchValue] = useState("");
 
   
   const handleLogout = () => {
@@ -18,6 +19,10 @@ export const Navbar = () => {
     navigate("/");
   };
 
+  const handleSearch = () => {
+    onSearchChange(searchValue.toLowerCase());
+  };
+  
   const token = localStorage.getItem("token");
   const { decodedToken, isExpired } = useJwt(token);
   let userId = null;
@@ -38,7 +43,6 @@ export const Navbar = () => {
       setFavorites(combinedNames)
     }
   };
-  console.log(favorites)
 
   useEffect(() => {
 
@@ -55,8 +59,25 @@ export const Navbar = () => {
 
         </button>
         <div id="search-container">
-          <input type="text" id="search-input" placeholder="Search for a movie or series..." />
-          <button className="btn bg-light" id="search-button"><i className="fas fa-search text-black bg-light"></i></button>
+          <input 
+            type="text" 
+            id="search-input" 
+            placeholder="Search for a movie..." 
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)} 
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                  handleSearch();
+              }
+          }}
+          />
+          
+          <button 
+            className="btn bg-light" 
+            id="search-button"
+            onClick={handleSearch}>
+              <i className="fas fa-search text-black bg-light"></i>
+          </button>
         </div>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mb-2 mb-lg-0">
