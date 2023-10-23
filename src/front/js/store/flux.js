@@ -393,6 +393,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			load_data: () =>{
+				var requestOptions = {
+					method: 'GET',
+					redirect: 'follow'
+				  };
+				  
+				  fetch(`${process.env.BACKEND_URL}api/load_database`, requestOptions)
+					.then(response => response.text())
+					.then(result => console.log(result))
+					.catch(error => console.log('error', error));
+			}
+
 		},
 	};
 
