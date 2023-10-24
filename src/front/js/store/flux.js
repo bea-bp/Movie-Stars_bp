@@ -21,7 +21,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Use getActions to call a function within a fuction
 
 			passchange: async (form) => {
-				const apiUrl = `${process.env.BACKEND_URL}api/pass-change`
+				const apiUrl = `${process.env.BACKEND_URL}/api/pass-change`
 				console.log(form, apiUrl)
 				const token = JSON.parse(localStorage.getItem("token"))
 				try {
@@ -74,7 +74,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			login: async (form) => {
-				const apiUrl = `${process.env.BACKEND_URL}api/login`
+				const apiUrl = `${process.env.BACKEND_URL}/api/login`
 				console.log(form)
 				try {
 					const res = await fetch(apiUrl, {
@@ -122,7 +122,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			signup: async (user) => {
-				const apiUrl = `${process.env.BACKEND_URL}api/signup`
+				const apiUrl = `${process.env.BACKEND_URL}/api/signup`
 				console.log(user, apiUrl)
 				try {
 					const res = await fetch(apiUrl, {
@@ -167,7 +167,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			validateToken: async () => {
 				let token = localStorage.getItem("token")
-				const apiUrl = `${process.env.BACKEND_URL}api/validate`
+				const apiUrl = `${process.env.BACKEND_URL}/api/validate`
 				console.log(apiUrl, token)
 				try {
 					const res = await fetch(apiUrl, {
@@ -193,7 +193,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			getMovies: async (searchQuery) => {
 				console.log(searchQuery)
-				const apiUrl = `${process.env.BACKEND_URL}api/movies?searchQuery=${searchQuery}`
+				const apiUrl = `${process.env.BACKEND_URL}/api/movies?searchQuery=${searchQuery}`
 				try {
 					const res = await fetch(apiUrl, {
 						method: "GET",
@@ -213,7 +213,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getMovieById: async (movieId) => {
-				const apiUrl = `${process.env.BACKEND_URL}api/movies/${movieId}`
+				const apiUrl = `${process.env.BACKEND_URL}/api/movies/${movieId}`
 				try {
 					const res = await fetch(apiUrl, {
 						method: "GET",
@@ -234,7 +234,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getActorById: async (actorId) => {
-				const apiUrl = `${process.env.BACKEND_URL}api/actors/${actorId}`;
+				const apiUrl = `${process.env.BACKEND_URL}/api/actors/${actorId}`;
 				try {
 					const res = await fetch(apiUrl, {
 						method: "GET",
@@ -254,7 +254,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			getDirectorById: async (directorId) => {
-				const apiUrl = `${process.env.BACKEND_URL}api/directors/${directorId}`;
+				const apiUrl = `${process.env.BACKEND_URL}/api/directors/${directorId}`;
 				try {
 					const res = await fetch(apiUrl, {
 						method: "GET",
@@ -275,7 +275,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getMoviesByActor: async (actorId) => {
-				const apiUrl = `${process.env.BACKEND_URL}api/actors/${actorId}/movies`;
+				const apiUrl = `${process.env.BACKEND_URL}/api/actors/${actorId}/movies`;
 				try {
 					const res = await fetch(apiUrl, {
 						method: "GET",
@@ -298,7 +298,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 
 			addFavorite: async (element, userId) => {
-				const apiUrl = `${process.env.BACKEND_URL}api/users/${userId}/favorites`;
+				const apiUrl = `${process.env.BACKEND_URL}/api/users/${userId}/favorites`;
 
 				const token = localStorage.getItem("token");
 
@@ -328,7 +328,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getFavorites: async (userId) => {
 				const token = localStorage.getItem("token");
 				if (!token) return [];
-				const apiUrl = `${process.env.BACKEND_URL}api/users/favorites/${userId}`;
+				const apiUrl = `${process.env.BACKEND_URL}/api/users/favorites/${userId}`;
 				try {
 					const response = await fetch(apiUrl, {
 						headers: {
@@ -352,7 +352,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			isFavorite: async (id) => {
 				const token = localStorage.getItem("token");
 				if (!token) return [];
-				const apiUrl = `${process.env.BACKEND_URL}api/is_favorites/${id}`;
+				const apiUrl = `${process.env.BACKEND_URL}/api/is_favorites/${id}`;
 				try {
 					const response = await fetch(apiUrl, {
 						headers: {
@@ -374,7 +374,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			deleteFavorite: async (favoriteId, favoriteType, userId) => {
-				const apiUrl = `${process.env.BACKEND_URL}api/users/${userId}/favorites/${favoriteType}/${favoriteId}`;
+				const apiUrl = `${process.env.BACKEND_URL}/api/users/${userId}/favorites/${favoriteType}/${favoriteId}`;
 				const token = localStorage.getItem("token");
 				try {
 					const response = await fetch(apiUrl, {
@@ -399,7 +399,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					redirect: 'follow'
 				  };
 				  
-				  fetch(`${process.env.BACKEND_URL}api/load_database`, requestOptions)
+				  fetch(`${process.env.BACKEND_URL}/api/load_database`, requestOptions)
 					.then(response => response.text())
 					.then(result => console.log(result))
 					.catch(error => console.log('error', error));
