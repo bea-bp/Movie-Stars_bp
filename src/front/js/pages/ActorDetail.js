@@ -25,17 +25,29 @@ export const ActorDetail = () => {
         : no_image;
 
 
-    const logged = store.logged
+    // const logged = store.logged
 
+    // const token = localStorage.getItem("token");
+    // if (!token) return;
+
+    // const { decodedToken, isExpired } = useJwt(token);
+
+
+    // let userId = null;
+    // if (decodedToken && !isExpired) {
+    //     userId = decodedToken.sub;
+    // }
+
+    // Obtiene el token del local storage
     const token = localStorage.getItem("token");
-    if (!token) return;
 
-    const { decodedToken, isExpired } = useJwt(token);
-
-
+    // Si hay un token, verifica si ha expirado y obtén el userId
     let userId = null;
-    if (decodedToken && !isExpired) {
-        userId = decodedToken.sub;
+    if (token) {
+        const { decodedToken, isExpired } = useJwt(token);
+        if (decodedToken && !isExpired) {
+            userId = decodedToken.sub;
+        }
     }
 
     const [isFavorite, setIsFavorite] = useState(false);

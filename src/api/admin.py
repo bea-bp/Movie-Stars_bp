@@ -1,4 +1,3 @@
-  
 import os
 from flask_admin import Admin
 from .models import db, User, Movie, Actor, Director, Genre, Favorite
@@ -7,7 +6,7 @@ from flask import Flask
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["http://localhost:3000", "https://miotrodominio.com"])
 
 def setup_admin(app):
     app.secret_key = os.environ.get('FLASK_APP_KEY', 'sample key')

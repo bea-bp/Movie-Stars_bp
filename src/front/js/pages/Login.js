@@ -43,7 +43,7 @@ export const Login = () => {
                 <img id="image" src={Moviestar} />
                 <form onSubmit={onSubmit}>
                     <div>
-                        <input className="text-center" name="email" onChange={handleChange} type="text" id="username1" placeholder="Username" value={form.email} required></input>
+                        <input className="text-center" name="email" onChange={handleChange} type="text" id="username1" placeholder="Email" value={form.email} required></input>
                     </div>
                     <br />
                     <div>
