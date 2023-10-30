@@ -6,6 +6,5 @@ npm install
 npm run build
 
 pipenv install
-pipenv run init
-pipenv run migrate 
+
 pipenv run upgrade
