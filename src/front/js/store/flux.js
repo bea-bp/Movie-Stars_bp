@@ -2,8 +2,6 @@ import Swal from 'sweetalert2'
 import { useJwt } from "react-jwt";
 
 
-
-
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
