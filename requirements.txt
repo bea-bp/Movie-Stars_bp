@@ -27,3 +27,4 @@ wtforms==2.3.3
 flask-jwt-extended==4.0.0
 requests==2.25.1
 bcrypt==3.2.0
+flask-async-io

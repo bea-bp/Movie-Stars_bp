@@ -11,6 +11,8 @@ from flask import request, jsonify
 from flask_cors import CORS
 import bcrypt
 from sqlalchemy import func
+from flask_asyncio import FlaskAsyncIO
+
 
 app = Flask(__name__)
 CORS(app)
@@ -25,7 +27,7 @@ api = Blueprint('routes', __name__)
 
 # HARRY POTTER MOVIES LOAD
 @api.route("/load_database", methods=["GET"])
-def load_database():
+async def load_database():
 
     url = "https://api.themoviedb.org/3/search/movie?query=harry%20potter&language=english"
 
