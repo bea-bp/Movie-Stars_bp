@@ -11,7 +11,7 @@ from flask import request, jsonify
 from flask_cors import CORS
 import bcrypt
 from sqlalchemy import func
-from flask_asyncio import FlaskAsyncIO
+
 
 
 app = Flask(__name__)
